@@ -17,12 +17,22 @@ const store = createStore({
         photos(state) {
             return state.photos;
         },
-        
+        // getter -  реалізація за умовою завдання
+        author(state) {
+            let myTarget = state.photos.filter(x => x._id === state.id).Author;
+            
+            return myTarget;
+        }
+        // мій варіант реалізації--- через мутацію....
         //  використовую геттер фото для відображення колекції фотографій, тому записую пошук автора в мутацію
     },
     mutations: {
         setPhotos(state, photos) {
             state.photos = photos;
+        },
+        // це потрібно щоб id не було статичним
+        setId(state,id) {
+            state.id = id;
         },
         async findAuthor(state, id) {
             let myTarget = JSON.parse(JSON.stringify(state.photos.filter(x => x._id === id)))[0].Author;
