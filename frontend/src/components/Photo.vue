@@ -1,9 +1,17 @@
 <template>
-<input type ="text" placeholder="Author" v-model="selectedAuthor">
-<input type="button" value="Знайти за автором" @click="findByAuthor"/>
-<ul class="block" v-if="photos.length>0">
-  <li v-for="(photo, i) in photos" :key="i" class="blockEl"> 
-      <h1>{{photo.Name}}</h1>
+<div>
+Name:<h1>{{studentInfo.name}}</h1>
+<h2>{{studentInfo.surname}}</h2>
+<p>{{variant}}</p>
+
+<a v-bind:href="file">FIle with theory answer:</a>
+
+
+<ul class="block">
+  <li v-for="photo in photos" :key="photo._id" class="blockEl"
+  
+  > 
+      <h1 v-on:click="selectPhoto(photo._id)">{{photo.Name}}</h1>
       <h3>Автор:{{photo.Author}}</h3>
       <p>Опис зробленого фото:{{photo.Description}}</p>
       <img alt="Cover" :src="photo.UrlFile" class="photoClass"/>
@@ -20,31 +28,39 @@
       </ul>
     </li>
 </ul>
-<div v-else>Wait...</div>
+
+</div>
+
 </template>
 <script>
-import axios from "axios";
-export default{
+import {mapActions, mapState, mapGetters, mapMutations} from "vuex";
+
+export default {
     data(){
-        return{
-            photos:[],
-            selectedAuthor:"",
+        return {
+            
+            
+            selected: null,
         }
     },
-    async mounted() {
-      try {
-         this.photos = (await axios.get("http://localhost:4000/api/photo")).data;
-      }catch(err) {
-        console.log(err);
-      }
+    computed: {
+       ...mapState(["studentInfo", "variant","file"]),
+       ...mapActions(["loadPhotos"]),
+       ...mapGetters(["photos"]),
+       
+       
     },
+    async mounted() {
+       await this.$store.dispatch("loadPhotos");
+    },
+    
     methods: {
-    async findByAuthor() {
-      try {
-       this.photos = (await axios.get("http://localhost:4000/api/photo")).data.filter(photo => photo.Author === this.selectedAuthor);
-      }catch(err) {
-        console.log(err);
-      }
+      ...mapMutations(["findAuthor"]),
+    async selectPhoto(id) {
+      this.selected = id;
+      console.log(this.selected);
+      await this.$store.commit("findAuthor", this.selected);
+      
     },
   }
 }
