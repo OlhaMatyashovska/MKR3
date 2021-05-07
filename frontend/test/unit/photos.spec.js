@@ -107,11 +107,11 @@ describe("Unit tests for photos vuex unit", () => {
         it("should return name of author of photo by id", () => {
             const store = createStore({
                 state: {
-                    messages: [...testPhotos],
+                    photos: [...testPhotos],
                     id:"60606e730b5a3557ccf3c419"
                 },
                 getters: {
-                    author: message.getters.author
+                    author: photos.getters.author
                 }
             });
 
@@ -125,11 +125,11 @@ describe("Unit tests for photos vuex unit", () => {
         it("should return name of author of photo by id", () => {
             const store = createStore({
                 state: {
-                    messages: [...testPhotos],
+                    photos: [...testPhotos],
                     id:"meooow"
                 },
                 getters: {
-                    author: message.getters.author
+                    author: photos.getters.author
                 }
             });
 
